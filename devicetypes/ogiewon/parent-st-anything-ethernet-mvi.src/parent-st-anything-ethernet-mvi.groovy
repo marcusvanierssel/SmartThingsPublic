@@ -348,6 +348,9 @@ private createChildDevice(String deviceName, String deviceNumber) {
          		case "pH": 
                 		deviceHandlerName = "Child pH Sensor" 
                 	break        
+         		case "ORP": 
+                		deviceHandlerName = "Child ORP Sensor" 
+                	break        
          		case "blind": 
                 		deviceHandlerName = "Child Blind" 
                 	break        
