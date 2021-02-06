@@ -19,7 +19,7 @@
  *    2018-06-02  MVI	  		New
  */
 metadata {
-	definition (name: "Child Fan", namespace: "ogiewon", author: "Marcus van Ierssel", cstHandler: true, ocfDeviceType: "oic.d.fan", mnmn: "SmartThingsCommunity", vid: "generic-fan") {
+	definition (name: "Child Fan", namespace: "ogiewon", author: "Marcus van Ierssel", cstHandler: true, ocfDeviceType: "oic.d.fan", vid: "generic-fan") {
 		capability "Fan Speed" 
    		//capability "Switch"
 		capability "Actuator"
@@ -34,50 +34,10 @@ metadata {
         command "on"
         command "off"
         command "setFanSpeed"
-		attribute "lastUpdated", "String"
+
   		attribute "lightState", "String"
         attribute "powerState", "String"
 	}
-
-	simulator {
-
-	}
-
-    tiles(scale: 2) {
-        multiAttributeTile(name:"fan", type: "generic", width: 3, height: 4) {
-            tileAttribute("device.fanSpeed", key: "PRIMARY_CONTROL") {
-                attributeState "0",  label: '',  action: "low", icon: "st.thermostat.fan-off", backgroundColor: "#ffffff", nextState: "low", defaultState: true
-                attributeState "1",  label: 'Low',  action: "med",  icon: "st.Lighting.light24", backgroundColor: "#f1d801", nextState: "med"
-                attributeState "2",  label: 'Med',  action: "high", icon: "st.Lighting.light24", backgroundColor: "#d04e00", nextState: "high"
-                attributeState "3", label: 'High', action: "fanoff", icon: "st.Lighting.light24", backgroundColor: "#bc2323", nextState: "off"
-            }
-            tileAttribute("device.lastUpdated", key: "SECONDARY_CONTROL") {
-                attributeState("default", label:'Last Update: ${currentValue}',icon: "st.Health & Wellness.health9")
-            }
-        }
-        standardTile("fanlow", "device.fanSpeed", width: 2, height: 2, inactiveLabel: false, decoration: "flat") {
-            state("statelow", label:'Low', action:"low")
-        }
-        standardTile("fanmed", "device.fanSpeed", width: 2, height: 2, inactiveLabel: false, decoration: "flat") {
-            state("statemed", label:'Med', action:"med")
-        }
-        standardTile("fanhigh", "device.fanSpeed", width: 2, height: 2, inactiveLabel: false, decoration: "flat") {
-            state("statehigh", label:"High", action:"high")
-        }
-        standardTile("light", "device.lightState", width: 3, height: 2, decoration: "flat") {
-    		state "off", label: "off", icon: "st.Lighting.light13", backgroundColor: "#ffffff", action: "lightOff", nextState: "on", defaultState: true
-    		state "on",  label: "on",  icon: "st.Lighting.light11",  backgroundColor: "#00a0dc", action: "lightOn", nextState: "off"
-		}
-        standardTile("power", "device.powerState", width: 3, height: 2, decoration: "flat") {
-    		state "off", label: "", icon: "st.thermostat.heating-cooling-off", backgroundColor: "#ffffff", action: "off", nextState: "on", defaultState: true
-    		state "on",  label: "",  icon: "st.thermostat.fan-on",  backgroundColor: "#00a0dc", action: "on", nextState: "off"
-		}
-        standardTile("refresh", "device.fanSpeed", width: 3, height: 2, decoration: "flat") {
-    		state "refresh", label: "refresh", icon: "st.secondary.refresh", backgroundColor: "#ffffff", action: "refresh"
-		}
-        main "fan"
-        details(["fan", "fanlow", "fanmed", "fanhigh", "light", "power"])
-    }
 }
 
 def fanoff() {    setFanSpeed(0)}
@@ -125,10 +85,6 @@ def parse(String description) {
         // Update device
         log.debug "name: ${name} value: ${value}"
         sendEvent(name: name, value: value)
-        // Update lastUpdated date and time
-        def nowDay = new Date().format("MMM dd", location.timeZone)
-        def nowTime = new Date().format("h:mm a", location.timeZone)
-        sendEvent(name: "lastUpdated", value: nowDay + " at " + nowTime, displayed: false)
     }
     else {
     	log.debug "Missing either name or value.  Cannot parse!"

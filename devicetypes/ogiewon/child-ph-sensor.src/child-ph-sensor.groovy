@@ -24,37 +24,9 @@
  */
 metadata {
 	definition (name: "Child pH Sensor", namespace: "ogiewon", author: "Marcus van Ierssel") {
-		capability "pH Measurement"
+		//capability "pH Measurement"
 		capability "Sensor"
-
-		attribute "lastUpdated", "String"
-	}
-
-	simulator {
-
-	}
-
-	tiles(scale: 2) {
-		multiAttributeTile(name: "pH", type: "generic", width: 6, height: 4, canChangeIcon: true) {
-			tileAttribute("device.pH", key: "PRIMARY_CONTROL") {
-				attributeState("pH", label: 'pH ${currentValue}', defaultState: true, backgroundColors: [
-                                // Celsius
-                                [value: 6, color: "#dc243e"],
-                                [value: 7, color: "#79b821"],
-                                [value: 8, color: "#dc243e"]
-						])
-			}
- 			tileAttribute("device.lastUpdated", key: "SECONDARY_CONTROL") {
-    				attributeState("default", label:'    Last updated ${currentValue}',icon: "st.Health & Wellness.health9")
-            }
-		}
-        valueTile("phMain", "device.pH", width: 2, height: 2, inactiveLabel: false, decoration: "flat") {
-            state("default", label:'pH ${currentValue}', icon:"st.alarm.water.wet")
-        }
-
-        main "phMain"
-        details(["pH"])
-
+        capability "tomorrowoption39787.ph"
 	}
 }
 
@@ -67,10 +39,6 @@ def parse(String description) {
         // Update device
         sendEvent(name: "pH", value: value)
         //sendEvent(name: name, value: value)
-        // Update lastUpdated date and time
-        def nowDay = new Date().format("MMM dd", location.timeZone)
-        def nowTime = new Date().format("h:mm a", location.timeZone)
-        sendEvent(name: "lastUpdated", value: nowDay + " at " + nowTime, displayed: false)
     }
     else {
     	log.debug "Missing either name or value.  Cannot parse!"
